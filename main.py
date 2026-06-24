@@ -5,28 +5,24 @@ from pydantic import BaseModel
 DB_FILE = "school.db"
 app = FastAPI(title="School Registration App")
 
-# --- DATABASE SETUP ---
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     
-    # 1. Students Table (6 attributes)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS students (
         student_id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT, email TEXT UNIQUE, age INTEGER, major TEXT, enrollment_year INTEGER
     );
     """)
-    
-    # 2. Teachers Table (6 attributes)
+   
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS teachers (
         teacher_id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT, email TEXT UNIQUE, department TEXT, office_number TEXT, years_experience INTEGER
     );
     """)
-    
-    # 3. Courses Table (6 attributes)
+
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS courses (
         course_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,7 +36,7 @@ def init_db():
 init_db()
 
 
-# --- DATA MODELS (DATA SHAPES) ---
+
 
 class Student(BaseModel):
     name: str
@@ -64,9 +60,7 @@ class Course(BaseModel):
     teacher_id: int
 
 
-# ==========================================
-# --- 1. STUDENT CRUD ENDPOINTS ---
-# ==========================================
+
 
 @app.post("/students/")
 def create_student(student: Student):
